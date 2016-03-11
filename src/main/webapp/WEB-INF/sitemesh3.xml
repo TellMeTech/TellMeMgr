@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemesh>
+	 <!-- 指明满足“/*”的页面，将被“/WEB-INF/views/decorators/decorator.html”所装饰 -->
+     <mapping path="/*" decorator="/page/decorators/main.jsp" />  
+     <!-- <mapping path="/customer/product/*" decorator="/page/decorators/customerMain.jsp" /> 
+     <mapping path="/customer/console/*" decorator="/page/decorators/consoleMain.jsp" /> -->
+     <mapping path="/admin/*" decorator="/page/decorators/adminMain.jsp" /> 
+     <mapping path="/customer/*" decorator="/page/decorators/adminMain.jsp" /> 
+     <!-- 指明满足“/exclude.jsp*”的页面，将被排除，不被装饰 -->
+     <mapping path="**/source/**" exclue="true" /> 
+     <mapping path="**/dwr/**" exclue="true" />
+     <mapping path="**/fileUpload/**" exclue="true" />
+     <mapping path="**/index.do**" exclue="true" />
+     <mapping path="**/login.do**" exclue="true" />
+     <mapping path="**/admin.do**" exclue="true" />
+     <mapping path="**/**login.do" exclue="true" />
+     <mapping path="**/**register.do" exclue="true" />
+     <mapping path="**/jsonLoad**" exclue="true" />
+     <mapping path="**/jsonload**" exclue="true" />
+     <mapping path="**/jsonSave**" exclue="true" />
+     <mapping path="**/jsonsave**" exclue="true" />
+     <mapping path="**/jsonDelete**" exclue="true" />
+     <mapping path="**/jsondelete**" exclue="true" />
+     <mapping path="**/jsonUpdate**" exclue="true" />
+     <mapping path="**/jsonupdate**" exclue="true" />
+     <mapping path="**/jsonOperat**" exclue="true" />
+     <mapping path="**/jsonDo**" exclue="true" />
+     <mapping path="**/rest/user**" exclue="true" />
+</sitemesh>
+    
