@@ -1,11 +1,16 @@
 package com.hotel.web.controller.admin;
 
+import java.io.UnsupportedEncodingException;
+
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.hotel.model.User;
 import com.hotel.service.UserService;
 import com.hotel.web.controller.BaseAction;
 
@@ -41,34 +46,20 @@ public class UserAction extends BaseAction
 	// [end]
 	
 	// [started]
-//	/**
-//	 * 系统用户管理
-//	 *  
-//	 * @param request
-//	 * @param response
-//	 * @return 
-//	 */
-//	@RequestMapping(value = "/userList.do")
-//	public String UserInit(
-//			User user,
-//			HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException{ 
-//		if(user.getSearchName()!=null&&user.getSearchName().length()>0){
-//			String searchName =  new String(user.getSearchName().getBytes("iso8859-1"), "utf-8");  
-//			user.setSearchName(searchName); 
-//		}
-//		if (user.getPageNo() == null)
-//			user.setPageNo(1);
-//		user.setPageSize(Constants.DEFAULT_PAGE_SIZE);
-//		user.setUserType(1);
-//		List<User> list = userService.getUserList(user);
-//		int totalCount = userService.getUserListCount(user);
-//		user.setTotalCount(totalCount);
-//		User u = this.getLoginUser();
-//		request.setAttribute("user", u); 
-//		request.setAttribute("userInfo", user); 
-//		request.setAttribute("userList", list); 
-//		return "web/admin/user/userList";
-//	}
+	/**
+	 * 系统用户管理
+	 *  
+	 * @param request
+	 * @param response
+	 * @return 
+	 */
+	@RequestMapping(value = "/userList.do")
+	public String userList(
+			User user,
+			HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException{ 
+		
+		return "web/admin/user/userList";
+	}
 	/**
 	 * 根据OrganId获取用户列表,返回json对象，包括状态值
 	 * @param organId

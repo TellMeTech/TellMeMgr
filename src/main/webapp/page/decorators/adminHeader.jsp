@@ -1,10 +1,10 @@
 <%@ page language="java" pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
 <script type="text/javascript">
-function gotoMainMenu(url,selectedMainMemu) {
+function gotoMainMenu(url,selectedMainMenu) {
 	$.ajax({  
         type : "post",  
-        url : "${pageContext.request.contextPath}/jsonLoadSession.do?selectedMainMemu="+selectedMainMemu,  
+        url : "${pageContext.request.contextPath}/jsonLoadSession.do?selectedMainMenu="+selectedMainMenu,  
         async : false
         });  
 	
@@ -18,7 +18,7 @@ function gotoMainMenu(url,selectedMainMemu) {
     	<ul class="fl">
     		<c:forEach var="item" items="${sessionScope.userResources}">
     			
-    			<li <c:if test="${item.id == sessionScope.userInfo.selectedMainMemu}">class="head-menu-now"</c:if> onclick="gotoMainMenu('${pageContext.request.contextPath}${item.url}','${item.id}')">${item.name}</li>
+    			<li <c:if test="${item.id == sessionScope.userInfo.selectedMainMenu}">class="head-menu-now"</c:if> onclick="gotoMainMenu('${pageContext.request.contextPath}${item.url}','${item.id}')">${item.name}</li>
     		    
     		</c:forEach>
         </ul>

@@ -64,7 +64,9 @@ String  url  =  uri.substring(uri.lastIndexOf("/")+1);
 	<div id="main">
 		<div id="adminheader"><jsp:include page="/page/decorators/adminHeader.jsp"></jsp:include></div>
 		<div id="content">   
+			<jsp:include page="/page/decorators/left.jsp"></jsp:include> 
 			<sitemesh:write property='body'/>
+			<div class="cl"></div>
 		</div>
 		<div id="footer"><jsp:include page="/page/decorators/footer.jsp"></jsp:include></div>
 	</div>

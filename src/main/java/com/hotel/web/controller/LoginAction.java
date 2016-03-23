@@ -1,5 +1,7 @@
 package com.hotel.web.controller;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -7,20 +9,23 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hotel.common.JsonResult;
 import com.hotel.common.ReturnResult;
 import com.hotel.model.User;
+import com.hotel.service.ResourceService;
 import com.hotel.service.UserService;
 
 @Scope("prototype")
 @Controller
 public class LoginAction extends BaseAction
-{
-
+{	
   @Resource(name="userService")
   private UserService userService;
+  @Resource(name="resourceService")
+  private ResourceService resourceService;
 
 //  @Resource(name="logService")
 //  private LogService logService;
@@ -46,16 +51,16 @@ public class LoginAction extends BaseAction
       ReturnResult<User> res = this.userService.login(user.getName(), user.getPsd(), user.isRememberMe());
       if (res.getCode().intValue() == 1) {
     	User u = (User)res.getResultObject();
-//        List<ResourceConfig> lf = parseResourceList(this.resourceService.getUserResource(u.getRoleId()));
-//        request.getSession().setAttribute("userResources", lf);
-//
-//        u.setSelectedMainMemu(((ResourceConfig)lf.get(0)).getId().intValue());
-//        u.setSelectedChildMenu(((ResourceConfig)((ResourceConfig)lf.get(0)).getChildResourcelist().get(0)).getId().intValue());
-//        u.setChildMenuList(((ResourceConfig)lf.get(0)).getChildResourcelist());
+        List<com.hotel.model.Resource> rs = parseResourceList(this.resourceService.getResourceByRoleId(1));
+        request.getSession().setAttribute("userResources", rs);
+        u.setSelectedMainMenu(rs.get(0).getId().intValue());
+        u.setSelectedChildMenu(rs.get(0).getChildResourceList().get(0).getId().intValue());
+        u.setChildMenuList(rs.get(0).getChildResourceList());
+        
         setLoginUser(u);
 
         json.setCode(new Integer(0));
-        //json.setGotoUrl(((ResourceConfig)lf.get(0)).getUrl()); 
+        json.setGotoUrl(rs.get(0).getUrl()); 
         json.setMessage("登录成功!");
         //日志
         //int type = u.getUserType();
@@ -107,34 +112,35 @@ public class LoginAction extends BaseAction
 //    }
 //    return json;
 //  }
-//  @ResponseBody
-//  @RequestMapping({"/jsonLoadSession.do"})
-//  public JsonResult<User> jsonLoadSession(@RequestParam(value="selectedMainMemu", required=false) Integer selectedMainMemu, @RequestParam(value="selectedChildMenu", required=false) Integer selectedChildMenu, HttpServletRequest request, HttpServletResponse response) { 
-//	  JsonResult<User> json = new JsonResult<User>();
-//    if (selectedMainMemu != null) {
-//      getLoginUser().setSelectedMainMemu(selectedMainMemu.intValue()); 
-//	List<ResourceConfig> lf = (List<ResourceConfig>) request.getSession().getAttribute(Constants.USER_SESSION_RESOURCE);
-//      for (ResourceConfig resource : lf) {
-//        if (resource.getId().intValue() == selectedMainMemu.intValue()) {
-//          getLoginUser().setSelectedChildMenu(((ResourceConfig)resource.getChildResourcelist().get(0)).getId().intValue());
-//          break;
-//        }
-//      }
-//    }
-//    else if (selectedChildMenu != null) {
-//      getLoginUser().setSelectedChildMenu(selectedChildMenu.intValue());
-//    }
-//
-//    json.setCode(new Integer(0));
-//    json.setMessage("更新成功!");
-//
-//    return json; }
+  @ResponseBody
+  @RequestMapping({"/jsonLoadSession.do"})
+  public JsonResult<User> jsonLoadSession(@RequestParam(value="selectedMainMenu", required=false) Integer selectedMainMemu, @RequestParam(value="selectedChildMenu", required=false) Integer selectedChildMenu, HttpServletRequest request, HttpServletResponse response) { 
+	  JsonResult<User> json = new JsonResult<User>();
+    if (selectedMainMemu != null) {
+      getLoginUser().setSelectedMainMenu(selectedMainMemu.intValue()); 
+	@SuppressWarnings("unchecked")
+	List<com.hotel.model.Resource> lf = (List<com.hotel.model.Resource>) request.getSession().getAttribute("userResources");
+      for (com.hotel.model.Resource resource : lf) {
+        if (resource.getId().intValue() == selectedMainMemu.intValue()) {
+          getLoginUser().setSelectedChildMenu((resource.getChildResourceList().get(0)).getId().intValue());
+          break;
+        }
+      }
+    }
+    else if (selectedChildMenu != null) {
+      getLoginUser().setSelectedChildMenu(selectedChildMenu.intValue());
+    }
 
-//  private List<ResourceConfig> parseResourceList(List<ResourceConfig> src)
-//  {
-//    for (ResourceConfig f : src) {
-//      f.setChildResourcelist(this.resourceService.getResourceByParentId(f.getId()));
-//    }
-//    return src;
-//  }
+    json.setCode(new Integer(0));
+    json.setMessage("更新成功!");
+
+    return json; }
+
+  private List<com.hotel.model.Resource> parseResourceList(List<com.hotel.model.Resource> src)
+  {
+    for (com.hotel.model.Resource r : src) {
+      r.setChildResourceList(this.resourceService.getResourceByParentId(r.getId()));
+    }
+    return src;
+  }
 }

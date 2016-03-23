@@ -26,14 +26,14 @@ function gotoChildMenu(url,selectedChildMenu) {
                 	<div class="yw-userhead">
                     	<img src="${pageContext.request.contextPath}/source/images/userhaed.png"/>
                    	</div>
-                    <p class="yw-usertxt">${sessionScope.userInfo.name}</p>
-                    <p class="yw-usertxt font-size14">${sessionScope.userInfo.email}</p>
+                    <p class="yw-usertxt">欢迎您，${sessionScope.userInfo.name}</p>
+                    <p class="yw-usertxt font-size14">${sessionScope.userInfo.createTime}</p>
                 </div>
                 <div class="yw-admin-left-menu">
                 	<ul>
                 	<c:forEach var="mainItem" items="${sessionScope.userResources}">
-                	    <c:if test="${mainItem.id == sessionScope.userInfo.selectedMainMemu}">
-	                	    <c:forEach var="item" items="${mainItem.childResourcelist}">
+                	    <c:if test="${mainItem.id == sessionScope.userInfo.selectedMainMenu}">
+	                	    <c:forEach var="item" items="${mainItem.childResourceList}">
 		                		<li <c:if test="${item.id == sessionScope.userInfo.selectedChildMenu}">class="yw-left-menu-now"</c:if>>
 		                        	<em></em><span onclick="gotoChildMenu('${pageContext.request.contextPath}${item.url}','${item.id}')">
 		                        	<i class="<c:if test="${item.css != null}">${item.css}</c:if><c:if test="${item.css == null}">fl yw-icon icon-todayjob</c:if>"></i>${item.name}</span>

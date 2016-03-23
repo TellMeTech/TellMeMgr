@@ -25,11 +25,11 @@ public class User {
     
     private String orgName;
     
-    private int selectedMainMemu;
+    private int selectedMainMenu;
     
     private int selectedChildMenu;
     
-    private List<Function> childMenuList;
+    private List<Resource> childMenuList;
     
     private boolean rememberMe;
 
@@ -57,12 +57,12 @@ public class User {
 		this.orgName = orgName;
 	}
 
-	public int getSelectedMainMemu() {
-		return selectedMainMemu;
+	public int getSelectedMainMenu() {
+		return selectedMainMenu;
 	}
 
-	public void setSelectedMainMemu(int selectedMainMemu) {
-		this.selectedMainMemu = selectedMainMemu;
+	public void setSelectedMainMenu(int selectedMainMenu) {
+		this.selectedMainMenu = selectedMainMenu;
 	}
 
 	public int getSelectedChildMenu() {
@@ -73,11 +73,11 @@ public class User {
 		this.selectedChildMenu = selectedChildMenu;
 	}
 
-	public List<Function> getChildMenuList() {
+	public List<Resource> getChildMenuList() {
 		return childMenuList;
 	}
 
-	public void setChildMenuList(List<Function> childMenuList) {
+	public void setChildMenuList(List<Resource> childMenuList) {
 		this.childMenuList = childMenuList;
 	}
 

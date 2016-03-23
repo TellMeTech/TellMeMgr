@@ -88,7 +88,7 @@ function login(){
 	        	var item = eval("(" + data + ")");
 	        	if(item.code == 0){
 	        		//SetPwdAndChk();
-	        		window.location.href =baseurl+"/admin/hotel/hotelList.do";
+	        		window.location.href =baseurl+"/"+item.gotoUrl;
 	        		$("#login-alert").html("");
 	        		$("#login-alert").hide();
 	        	}
