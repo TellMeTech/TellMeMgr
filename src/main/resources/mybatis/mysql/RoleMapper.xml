@@ -87,9 +87,4 @@
       	</if>
   </select>
   
-  <delete id="deletePermissionByRole" parameterType="java.lang.Integer" >
-    delete from t_role_resource
-    where role_id = #{roleId,jdbcType=INTEGER}
-  </delete>
-  
 </mapper>

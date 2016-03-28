@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hotel.dao.RoleMapper;
+import com.hotel.dao.RoleResourceMapper;
 import com.hotel.model.Role;
 import com.hotel.service.RoleService;
 
@@ -14,6 +15,9 @@ public class RoleServiceImpl implements RoleService {
 
 	@Autowired
 	private RoleMapper mapper;
+	@Autowired
+	private RoleResourceMapper roleResourceMapper;
+
 
 	@Override
 	public List<Role> getRoles() {
@@ -52,7 +56,7 @@ public class RoleServiceImpl implements RoleService {
 		// TODO Auto-generated method stub
 		int res = mapper.deleteByPrimaryKey(roleId);
 		if(res > 0){
-			mapper.deletePermissionByRole(roleId);
+			roleResourceMapper.deletePermissionByRole(roleId);
 			return true;
 		}
 		return false;

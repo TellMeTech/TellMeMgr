@@ -14,6 +14,7 @@
 	content="width=device-width, initial-scale=1, minimum-scale=1  ,maximum-scale=1, user-scalable=no" /> 
 <script type="text/javascript"> 
 	$(document).ready(function() {
+		/*
 		$("#cmbOrgan").combotree({
 				 url: 'jsonLoadOrganParent.do?rootId='+0,   
 				 editable:false,
@@ -32,7 +33,8 @@
 					}
    				 }
 			}); 
-		setShowStates();
+			*/
+		//setShowStates();
 		
 		//roleTypeChange();
 	}); 
@@ -130,29 +132,9 @@
 								<input name="name" onblur="valueTrim(this);"   type="text" value="${userInfo.name}" placeholder="请输入用户姓名"  class="easyui-validatebox" required="true" validType="Length[1,10]" style="width:254px;height:28px;" /> 
 								<span style="color:red">*</span>
 								<input id="hid_userId" name="id" type="hidden" value="${userInfo.id}" />  
-								<input id="hid_userType" name="userType" type="hidden" value="${userInfo.userType}" />  
+								<%-- <input id="hid_userType" name="userType" type="hidden" value="${userInfo.userType}" />  --%>
 							</td>
 						</tr>  
-						<tr>
-							<td align="center">用户性别：</td>
-							<td>
-								 <c:if test="${userInfo.sex == 0 }">
-							 	 	<label><input type="radio" name="sex" value="0" checked="checked" />保密</label> 
-							 	 	<label><input type="radio" name="sex" value="1" />男</label> 
-	 								<label><input type="radio" name="sex" value="2" />女</label> 
-							 	 </c:if>  
-							 	 <c:if test="${userInfo.sex == 1 }">
-							 	 	<label><input type="radio" name="sex" value="0" />保密</label> 
-							 	 	<label><input type="radio" name="sex" value="1" checked="checked" />男</label> 
-	 								<label><input type="radio" name="sex" value="2" />女</label> 
-							 	 </c:if> 
-							 	 <c:if test="${userInfo.sex == 2 }">
-							 	 	<label><input type="radio" name="sex" value="0" />保密</label> 
-							 	 	<label><input type="radio" name="sex" value="1" />男</label> 
-	 								<label><input type="radio" name="sex" value="2" checked="checked" />女</label> 
-							 	 </c:if>  
-							</td>
-						</tr> 
 						<tr>
 							<td align="center">所属机构：</td>
 							<td>
@@ -163,25 +145,25 @@
 						</tr> 
 						<tr>
 							<td align="center">手机号码：</td>
-							<td><input name="mobile"  onblur="valueTrim(this);"   placeholder="请输入用户手机号码"   type="text" value="${userInfo.mobile}" class="easyui-validatebox"  validType="mobile" style="width:254px;height:28px;" /></td>
+							<td><input name="mobile"  onblur="valueTrim(this);"   placeholder="请输入用户手机号码"   type="text" value="${userInfo.id}" class="easyui-validatebox"  validType="mobile" style="width:254px;height:28px;" /></td>
 						</tr> 
 						<tr>
 							<td align="center">电子邮箱：</td>
-							<td><input name="email"  onblur="valueTrim(this);"   placeholder="请输入用户电子邮箱"   type="text" value="${userInfo.email}" class="easyui-validatebox"  validType="EMAIL" style="width:254px;height:28px;" /></td>
+							<td><input name="email"  onblur="valueTrim(this);"   placeholder="请输入用户电子邮箱"   type="text" value="${userInfo.id}" class="easyui-validatebox"  validType="EMAIL" style="width:254px;height:28px;" /></td>
 						</tr> 
 						<tr id="userAccount" >
 							<td align="center">登陆账号：</td>
-							<td><input name="account"  onblur="valueTrim(this);"   placeholder="请输入登陆账号"   type="text" value="${userInfo.account}" class="easyui-validatebox" required="true" validType="Length[4,22]" style="width:254px;height:28px;" /><span style="color:red">*</span></td>
+							<td><input name="account"  onblur="valueTrim(this);"   placeholder="请输入登陆账号"   type="text" value="${userInfo.id}" class="easyui-validatebox" required="true" validType="Length[4,22]" style="width:254px;height:28px;" /><span style="color:red">*</span></td>
 						</tr> 
 						<tr id="userPassword" >
 							<td align="center">登陆密码：</td>
-							<td><input name="password"  onblur="valueTrim(this);"   placeholder="请输入登陆密码"   type="password" value="${userInfo.password}" class="easyui-validatebox" required="true" validType="Length[1,100]" style="width:254px;height:28px;" /><span style="color:red">*</span></td>
+							<td><input name="password"  onblur="valueTrim(this);"   placeholder="请输入登陆密码"   type="password" value="${userInfo.id}" class="easyui-validatebox" required="true" validType="Length[1,100]" style="width:254px;height:28px;" /><span style="color:red">*</span></td>
 						</tr> 
 						<tr>
 							<td align="center">角色分配：</td>
 							<td>
         						<p class="yw-window-p"> 
-        							<input type="hidden" id="hid_roleId" value="${userInfo.roleId }" />
+        							<input type="hidden" id="hid_roleId" value="${userInfo.id }" />
 						        	<c:forEach var="item" items="${roleList}">
 						        		<input  id="role${item.id}" onclick="roleTypeChange('${item.name }');" name="roleId" type="radio" value="${item.id} " />${item.name }
 						        	</c:forEach>

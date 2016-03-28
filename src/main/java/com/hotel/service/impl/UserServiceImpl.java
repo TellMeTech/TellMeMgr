@@ -1,5 +1,7 @@
 package com.hotel.service.impl;
 
+import java.util.List;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
@@ -71,12 +73,24 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int updateUser(User record) {
 		// TODO Auto-generated method stub
-		return 0;
+		return userMapper.updateByPrimaryKeySelective(record);
 	}
 
 	@Override
-	public ReturnResult<User> getUserById(Integer id) {
+	public User getUserById(Integer id) {
 		// TODO Auto-generated method stub
-		return null;
+		return userMapper.selectByPrimaryKey(id);
+	}
+
+	@Override
+	public List<User> getUsers(User record) {
+		// TODO Auto-generated method stub
+		return userMapper.getUsers(record);
+	}
+
+	@Override
+	public int countUsers(User record) {
+		// TODO Auto-generated method stub
+		return userMapper.countUsers(record);
 	}
 }

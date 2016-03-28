@@ -21,6 +21,4 @@ public interface RoleMapper {
     List<Role> selectAll();
     
     List<Role> getExistRole(Role role);
-    
-    int deletePermissionByRole(int roleId);
 }

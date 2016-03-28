@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.hotel.common.JsonResult;
 import com.hotel.common.ReturnResult;
@@ -30,11 +31,11 @@ public class LoginAction extends BaseAction
 //  @Resource(name="logService")
 //  private LogService logService;
 
-//  @RequestMapping({"/admin.do"})
-//  public ModelAndView adminlogin() {
-//    ModelAndView mav = new ModelAndView("adminLogin");
-//    return mav;
-//  }
+  @RequestMapping({"/admin.do"})
+  public ModelAndView adminlogin() {
+    ModelAndView mav = new ModelAndView("adminLogin");
+    return mav;
+  }
 
 //  @RequestMapping({"/gotologin.do"})
 //  public ModelAndView gotologin() {

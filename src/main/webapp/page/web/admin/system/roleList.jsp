@@ -3,8 +3,6 @@
 <html>
 <head>
 <title>角色列表</title>
-<script src="${pageContext.request.contextPath}/source/js/pager/jquery.pager.js"></script>
-<link href="${pageContext.request.contextPath}/source/js/pager/Pager.css" rel="stylesheet" />
 <script type="text/javascript">
 	function deleteRole(roleId){
 		

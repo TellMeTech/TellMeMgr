@@ -57,8 +57,39 @@ public class UserAction extends BaseAction
 	public String userList(
 			User user,
 			HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException{ 
-		
+		if (user.getPageNo() == null){
+			user.setPageNo(1);
+		}
+		if (user.getPageSize() == null){
+			user.setPageSize(10);
+		}
+		String temp = user.getSearchName();
+		if (temp != null){
+			temp = new String(temp.getBytes("ISO-8859-1"), "UTF-8");
+			user.setSearchName("%"+temp+"%");
+		}
+		user.setOrgId(4);
+		user.setTotalCount(userService.countUsers(user));
+		request.getSession().setAttribute("users", userService.getUsers(user));
+		user.setSearchName(temp);
+		request.getSession().setAttribute("pageUser", user);
 		return "web/admin/user/userList";
+	}
+	
+	@RequestMapping(value = "/userInfo.do")
+	public String userInfo(
+			User user,
+			HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException{ 
+		User u = new User();
+		if(user.getId() == null || user.getId().intValue() == 0){
+			u.setId(0);
+			//u.setDescription("");
+			u.setName("");
+		}else{
+			u = userService.getUserById(user.getId());
+		}
+		request.getSession().setAttribute("u", u);
+		return "web/admin/user/userInfo";
 	}
 	/**
 	 * 根据OrganId获取用户列表,返回json对象，包括状态值

@@ -1,5 +1,7 @@
 package com.hotel.service;
 
+import java.util.List;
+
 import com.hotel.common.ReturnResult;
 import com.hotel.model.User;
 
@@ -11,7 +13,11 @@ public interface UserService {
     
     int updateUser(User record);
     
-    ReturnResult<User> getUserById(Integer id);
+    User getUserById(Integer id);
     
     ReturnResult<User> login(String loginName, String passwd,boolean rememberMe) throws Exception;
+    
+    List<User> getUsers(User record);
+    
+    int countUsers(User record);
 }

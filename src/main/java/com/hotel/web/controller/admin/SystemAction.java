@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hotel.common.JsonResult;
 import com.hotel.model.Role;
+import com.hotel.model.RoleResource;
 import com.hotel.model.User;
+import com.hotel.service.ResourceService;
+import com.hotel.service.RoleResourceService;
 import com.hotel.service.RoleService;
 import com.hotel.service.UserService;
 import com.hotel.web.controller.BaseAction;
@@ -27,14 +30,17 @@ public class SystemAction extends BaseAction
 {
 
 	// [start] 接口引用
-//	@Resource(name = "roleService")
-//	private RoleService roleService; 
+	@Resource(name = "resourceService")
+	private ResourceService resourceService; 
 	
 	@Resource(name = "userService")
 	private UserService userService; 
 	
 	@Resource(name = "roleService")
 	private RoleService roleService;
+	
+	@Resource(name = "roleResourceService")
+	private RoleResourceService roleResourceService;
 
 	// [end]
 	
@@ -50,7 +56,8 @@ public class SystemAction extends BaseAction
 	public String permissionsList(
 			User user,
 			HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException{ 
-		
+		request.getSession().setAttribute("roles", roleService.getRoles());
+		request.getSession().setAttribute("resources", resourceService.getResourceByParentId(0));
 		return "web/admin/system/permissionsList";
 	}
 	
@@ -91,8 +98,39 @@ public class SystemAction extends BaseAction
 	public String userList(
 			User user,
 			HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException{ 
+		if (user.getPageNo() == null){
+			user.setPageNo(1);
+		}
+		if (user.getPageSize() == null){
+			user.setPageSize(10);
+		}
+		String temp = user.getSearchName();
 		
+		if (temp != null){
+			temp = new String(temp.getBytes("ISO-8859-1"), "UTF-8");
+			user.setSearchName("%"+temp+"%");
+		}
+		user.setTotalCount(userService.countUsers(user));
+		request.getSession().setAttribute("users", userService.getUsers(user));
+		user.setSearchName(temp);
+		request.getSession().setAttribute("pageUser", user);
 		return "web/admin/system/userList";
+	}
+	
+	@RequestMapping(value = "/userInfo.do")
+	public String userInfo(
+			User user,
+			HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException{ 
+		User u = new User();
+		if(user.getId() == null || user.getId().intValue() == 0){
+			u.setId(0);
+			//u.setDescription("");
+			u.setName("");
+		}else{
+			u = userService.getUserById(user.getId());
+		}
+		request.getSession().setAttribute("u", u);
+		return "web/admin/system/userInfo";
 	}
 	
 	@RequestMapping(value = "/config.do")
@@ -101,6 +139,25 @@ public class SystemAction extends BaseAction
 			HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException{ 
 		
 		return "web/admin/system/config";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/jsonLoadRoleList.do", method = RequestMethod.POST, produces = { "text/html;charset=UTF-8" })
+	public JsonResult<Role> jsonLoadRoleList(
+			Role role, HttpServletRequest request,
+			HttpServletResponse response) {
+		JsonResult<Role> js = new JsonResult<Role>();
+		js.setCode(new Integer(1));
+		js.setMessage("获取失败!");
+		try {
+			List<Role> roles = roleService.getRoles();
+			js.setCode(new Integer(0));
+			js.setMessage("");
+			js.setList(roles);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return js;
 	}
 	
 	@ResponseBody
@@ -156,6 +213,107 @@ public class SystemAction extends BaseAction
 					js.setMessage("保存成功!");
 				}
 			} 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return js;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/jsonLoadRoleResource.do", method = RequestMethod.POST, produces = { "text/html;charset=UTF-8" })
+	public JsonResult<com.hotel.model.Resource> jsonLoadRoleResource(
+			Role role, HttpServletRequest request,
+			HttpServletResponse response) {
+		JsonResult<com.hotel.model.Resource> js = new JsonResult<com.hotel.model.Resource>();
+		js.setCode(new Integer(1));
+		js.setMessage("保存失败!");
+		try {
+			if (role.getId() != null && role.getId() != 0) {
+				List<com.hotel.model.Resource> list = resourceService.getResourceByRoleId(role.getId());
+				js.setCode(new Integer(0));
+				js.setMessage("保存成功!");
+				js.setList(list);
+			} 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return js;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/jsonUpdateRoleResource.do", method = RequestMethod.POST, produces = { "text/html;charset=UTF-8" })
+	public JsonResult<Role> jsonUpdateRoleResource(
+			Role role, HttpServletRequest request,
+			HttpServletResponse response) {
+		JsonResult<Role> js = new JsonResult<Role>();
+		js.setCode(new Integer(1));
+		js.setMessage("保存失败!");
+		
+		if (role.getId() == null || role.getId() == 0){
+			js.setMessage("参数不完整!");
+			return js;
+		}
+		
+		String needAdd = request.getParameter("needAdd");
+		String needDelete = request.getParameter("needDelete");
+		if(needAdd == null || needDelete == null){
+			js.setMessage("参数不完整!");
+			return js;
+		}
+		
+		//删除部分
+		if(!needDelete.trim().equals("")){
+			RoleResource roleResource = new RoleResource();
+			if(needDelete.contains(",")){
+				String[] arr = needDelete.split(",");
+				roleResource.setRoleId(role.getId());
+				for(String tp : arr){
+					roleResource.setResourceId(new Integer(tp));
+					roleResourceService.deletePermissionByRoleAndResource(roleResource);
+				}
+			}else{
+				roleResource.setRoleId(role.getId());
+				roleResource.setResourceId(new Integer(needDelete));
+				roleResourceService.deletePermissionByRoleAndResource(roleResource);
+			}
+		}
+		
+		//添加部分
+		if(!needAdd.trim().equals("")){
+			RoleResource roleResource = new RoleResource();
+			if(needAdd.contains(",")){
+				String[] arr = needAdd.split(",");
+				roleResource.setRoleId(role.getId());
+				for(String tp : arr){
+					roleResource.setResourceId(new Integer(tp));
+					roleResourceService.add(roleResource);
+				}
+			}else{
+				roleResource.setRoleId(role.getId());
+				roleResource.setResourceId(new Integer(needDelete));
+				roleResourceService.add(roleResource);
+			}
+		}
+		
+		js.setCode(new Integer(0));
+		js.setMessage("保存成功!");
+		return js;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/jsonUpdateSystemUserStatus.do", method = RequestMethod.POST, produces = { "text/html;charset=UTF-8" })
+	public JsonResult<User> jsonUpdateSystemUserStatus(
+			User user, HttpServletRequest request,
+			HttpServletResponse response) {
+		JsonResult<User> js = new JsonResult<User>();
+		js.setCode(new Integer(1));
+		js.setMessage("保存失败!");
+		try {
+			int res = userService.updateUser(user);
+			if(res > 0){
+				js.setCode(new Integer(0));
+				js.setMessage("保存成功!");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

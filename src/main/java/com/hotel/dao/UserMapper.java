@@ -1,9 +1,13 @@
 package com.hotel.dao;
 
+import java.util.List;
+
 import com.hotel.model.User;
 
 @MyBatisRepository
 public interface UserMapper {
+	User selectByPrimaryKey(Integer id);
+	
     int deleteByPrimaryKey(Integer id);
 
     int insert(User record);
@@ -15,4 +19,8 @@ public interface UserMapper {
     int updateByPrimaryKey(User record);
 
     User getUserByName(String username);
+    
+    List<User> getUsers(User record);
+    
+    int countUsers(User record);
 }
