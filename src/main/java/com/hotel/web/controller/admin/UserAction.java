@@ -68,7 +68,7 @@ public class UserAction extends BaseAction
 			temp = new String(temp.getBytes("ISO-8859-1"), "UTF-8");
 			user.setSearchName("%"+temp+"%");
 		}
-		user.setOrgId(4);
+		user.setOrgId(3);
 		user.setTotalCount(userService.countUsers(user));
 		request.getSession().setAttribute("users", userService.getUsers(user));
 		user.setSearchName(temp);

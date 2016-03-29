@@ -15,8 +15,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.hotel.common.JsonResult;
 import com.hotel.common.ReturnResult;
+import com.hotel.model.Role;
 import com.hotel.model.User;
 import com.hotel.service.ResourceService;
+import com.hotel.service.RoleService;
 import com.hotel.service.UserService;
 
 @Scope("prototype")
@@ -25,6 +27,8 @@ public class LoginAction extends BaseAction
 {	
   @Resource(name="userService")
   private UserService userService;
+  @Resource(name="roleService")
+  private RoleService roleService;
   @Resource(name="resourceService")
   private ResourceService resourceService;
 
@@ -52,13 +56,20 @@ public class LoginAction extends BaseAction
       ReturnResult<User> res = this.userService.login(user.getName(), user.getPsd(), user.isRememberMe());
       if (res.getCode().intValue() == 1) {
     	User u = (User)res.getResultObject();
-        List<com.hotel.model.Resource> rs = parseResourceList(this.resourceService.getResourceByRoleId(1));
+    	
+    	//固定写死，确定表后需替换
+    	Integer roleId = 1;
+    	
+        List<com.hotel.model.Resource> rs = parseResourceList(this.resourceService.getResourceByRoleId(roleId));
         request.getSession().setAttribute("userResources", rs);
         u.setSelectedMainMenu(rs.get(0).getId().intValue());
         u.setSelectedChildMenu(rs.get(0).getChildResourceList().get(0).getId().intValue());
         u.setChildMenuList(rs.get(0).getChildResourceList());
         
         setLoginUser(u);
+        
+        Role role = roleService.selectByPrimaryKey(roleId);
+        request.getSession().setAttribute("roleName", role.getName());
 
         json.setCode(new Integer(0));
         json.setGotoUrl(rs.get(0).getUrl()); 

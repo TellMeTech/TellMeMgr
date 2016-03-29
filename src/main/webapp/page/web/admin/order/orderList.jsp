@@ -10,12 +10,12 @@ var topClick = false;
 
 $(document).ready(function(){
 	//showProcess(true, '温馨提示', '正在加载数据...'); 
-	//$("#pager").pager({
-	//		    pagenumber:'${pageUser.pageNo}',                         /* 表示初始页数 */
-	//		    pagecount:'${pageUser.pageCount}',                      /* 表示总页数 */
-	//		    totalCount:'${pageUser.totalCount}',
-	//		    buttonClickCallback:PageClick                     /* 表示点击分页数按钮调用的方法 */                  
-	//});
+	$("#pager").pager({
+			    pagenumber:'${pageUser.pageNo}',                         /* 表示初始页数 */
+			    pagecount:'${pageUser.pageCount}',                      /* 表示总页数 */
+			    totalCount:'${pageUser.totalCount}',
+			    buttonClickCallback:PageClick                     /* 表示点击分页数按钮调用的方法 */                  
+	});
 	$("#userList tr").each(function(i){
 		if(i>0){
 			$(this).bind("click",function(){
@@ -106,8 +106,8 @@ function OperatUser(id, status){
 	                   	<th width="4%" style="display:none"></th>
 	                   	<th><span style="margin-left:40px">订单号</span></th>
 	                   	<th>发货地址</th>
-	                   	<th>订单状态</th> 
-	                   	<th>下单时间</th> 
+	                   	<th>订单状态</th>
+	                   	<th>下单时间</th>
 	                   	<th>操作</th>
 	                </tr>
 	                <c:forEach var="item"  items="${users}">
@@ -123,12 +123,6 @@ function OperatUser(id, status){
 			            			<a href="javascript:void(0);" onclick="OperatUser('${item.id}',1,'${item.name}')" style="padding-left:5px;margin-top:25px" >发货</a>
 			            			<a href="javascript:void(0);" onclick="OperatUser('${item.id}',1,'${item.name}')" style="padding-left:5px;margin-top:25px" >配货信息</a>
 			            			<a href="javascript:void(0);" onclick="OperatUser('${item.id}',1,'${item.name}')" style="padding-left:5px;margin-top:25px" >签收</a>
-			            			<c:if test="${item.isUsed}">
-				            			<a href="javascript:void(0);" onclick="OperatUser('${item.id}',0,'${item.name}')" style="padding-left:5px;margin-top:25px" >禁用</a>
-									</c:if>
-									<c:if test="${!item.isUsed}">
-				            			<a href="javascript:void(0);" onclick="OperatUser('${item.id}',1,'${item.name}')" style="padding-left:5px;margin-top:25px" >启用</a>
-									</c:if>
 			            		</c:if>
 			            	</td>
 			            </tr>

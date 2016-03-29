@@ -27,7 +27,7 @@ function gotoChildMenu(url,selectedChildMenu) {
                     	<img src="${pageContext.request.contextPath}/source/images/userhaed.png"/>
                    	</div>
                     <p class="yw-usertxt">欢迎您，${sessionScope.userInfo.name}</p>
-                    <p class="yw-usertxt font-size14">${sessionScope.userInfo.createTime}</p>
+                    <p class="yw-usertxt font-size14">${sessionScope.roleName}</p>
                 </div>
                 <div class="yw-admin-left-menu">
                 	<ul>

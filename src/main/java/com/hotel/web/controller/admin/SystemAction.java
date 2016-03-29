@@ -290,7 +290,7 @@ public class SystemAction extends BaseAction
 				}
 			}else{
 				roleResource.setRoleId(role.getId());
-				roleResource.setResourceId(new Integer(needDelete));
+				roleResource.setResourceId(new Integer(needAdd));
 				roleResourceService.add(roleResource);
 			}
 		}
